@@ -7,3 +7,5 @@ Presentation Layer -> é o ponto de entrada para o sistema do ponto de vista do 
 Domain Layer -> é o fica os protocolos da nossas regrasd negócio.
 
 Data Layer -> é responsável por implementar nossas regras de négocio.
+
+Stub - duple de teste 
