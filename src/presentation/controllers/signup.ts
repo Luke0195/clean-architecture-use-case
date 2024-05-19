@@ -1,5 +1,6 @@
+import { type HttpRequest, type HttpResponse } from '../protocols/http'
 export class SignUpController {
-  handle(httRequest: any): any {
+  handle(httRequest: HttpRequest): HttpResponse {
     if (!httRequest.body.name) {
       return { statusCode: 400, body: new Error('Missing Param: name') }
     }
@@ -8,6 +9,6 @@ export class SignUpController {
       return { statusCode: 400, body: new Error('Missing Param: email') }
     }
 
-    return {}
+    return { statusCode: 201, body: {} }
   }
 }
