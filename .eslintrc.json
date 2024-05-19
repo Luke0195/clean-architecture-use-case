@@ -2,7 +2,14 @@
   "overrides": [
     {
       "files": ["*.js", "*.ts"],
-      "extends": "standard-with-typescript"
+      "extends": "standard-with-typescript",
+      "rules": {
+        "@typescript-eslint/prefer-nullish-coalescing": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off",
+        "@typescript-eslint/comma-dangle": "off",
+        "lint/suspicious/noExplicitAny": "off",
+        "@typescript-eslint/space-before-function-paren": "off"
+      }
     }
   ]
 }
