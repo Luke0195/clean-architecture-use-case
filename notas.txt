@@ -4,8 +4,8 @@ Adapter - É o padrão de projeto que visa adapter um framework externo a nossa 
 
 Presentation Layer -> é o ponto de entrada para o sistema do ponto de vista do usuário. Suas princpais preocupações são o roteamento de solicitações para a camada de aplicativo e o registro de todas as dependências no container IOC.
 
-Domain Layer -> é o fica os protocolos da nossas regrasd negócio.
+Domain Layer -> é o fica os protocolos da nossas regrasd negócio sáo os casos de uso da aplicação.
 
 Data Layer -> é responsável por implementar nossas regras de négocio.
 
-Stub - duple de teste 
+Stub - duple de teste
