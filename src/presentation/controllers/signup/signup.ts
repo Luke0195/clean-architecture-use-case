@@ -43,8 +43,8 @@ export class SignUpController implements Controller {
         password,
         name
       })
-      console.log(account)
-      return { statusCode: 201, body: {} }
+
+      return { statusCode: 201, body: account }
     } catch (error) {
       return serverError()
     }
