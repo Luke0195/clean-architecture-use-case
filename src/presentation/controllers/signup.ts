@@ -13,7 +13,7 @@ export class SignUpController implements Controller {
     this.emailValidator = emailValidator
   }
 
-  handle(httRequest: HttpRequest): HttpResponse {
+  handle(httpRequest: HttpRequest): HttpResponse {
     try {
       const requiredFields = [
         'name',
@@ -22,17 +22,18 @@ export class SignUpController implements Controller {
         'passwordConfirmation'
       ]
       for (const item of requiredFields) {
-        if (!httRequest.body[item]) {
+        if (!httpRequest.body[item]) {
           return badRequest(new MissingParamError(`Missing Param: ${item}`))
         }
       }
-      const isValidEmail = this.emailValidator.isValid(
-        httRequest.body.email as string
-      )
+      const { email, password, passwordConfirmation } = httpRequest.body
+      const isValidEmail = this.emailValidator.isValid(email as string)
       if (!isValidEmail) {
         return badRequest(new InvalidParamErorr('email'))
       }
-
+      if (password !== passwordConfirmation) {
+        return badRequest(new MissingParamError('passwordConfirmation'))
+      }
       return { statusCode: 201, body: {} }
     } catch (error) {
       return serverError()
