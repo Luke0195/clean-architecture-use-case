@@ -5,7 +5,7 @@ import {
   type HttpRequest,
   type HttpResponse
 } from './signup-protocols'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, serverError, created } from '../../helpers/http-helper'
 import { InvalidParamErorr, MissingParamError } from '../../errors'
 
 export class SignUpController implements Controller {
@@ -44,7 +44,7 @@ export class SignUpController implements Controller {
         name
       })
 
-      return { statusCode: 201, body: account }
+      return created(account)
     } catch (error) {
       return serverError()
     }
