@@ -1,8 +1,10 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamErorr, ServerError } from '../errors'
-import { type EmailValidator } from '../protocols'
-import { type AccountModel } from '../../domain/models/account'
-import { type AddAccount } from '../../domain/usecases/add-account'
+import { MissingParamError, InvalidParamErorr, ServerError } from '../../errors'
+import {
+  type AccountModel,
+  type AddAccount,
+  type EmailValidator
+} from './signup-protocols'
 
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub {
