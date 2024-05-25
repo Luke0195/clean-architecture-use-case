@@ -1,9 +1,9 @@
-/*
 import { MongoHelper } from '../helpers/mongo-helper'
+import { AccountMongoRepository } from './account'
 
 describe('Account MongoRepository', () => {
   beforeAll(async () => {
-    await MongoHelper.client.connect()
+    await MongoHelper.connect(process.env.MONGO_URL)
   })
 
   afterAll(async () => {
@@ -23,4 +23,3 @@ describe('Account MongoRepository', () => {
     expect(account.password).toBe('any_password')
   })
 })
-*/
