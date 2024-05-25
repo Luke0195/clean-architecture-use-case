@@ -2,6 +2,7 @@ import { type AddAccountRepository } from '../../../../data/protocols/add-accoun
 import { type AccountModel } from '../../../../domain/models/account'
 import { type AddAccountModel } from '../../../../domain/usecases/add-account'
 import { MongoHelper } from '../helpers/mongo-helper'
+import { mapAccount } from './account-mapper'
 
 export class AccountMongoRepository implements AddAccountRepository {
   async add(accountData: AddAccountModel): Promise<AccountModel> {
@@ -10,15 +11,6 @@ export class AccountMongoRepository implements AddAccountRepository {
     const createdAccount = await accountCollection.findOne({
       _id: result.insertedId
     })
-    const { _id, ...rest } = Object.assign({}, createdAccount, {
-      id: createdAccount._id.toString()
-    })
-    const account = {
-      id: rest.id,
-      name: rest.name,
-      email: rest.email,
-      password: rest.password
-    }
-    return account
+    return mapAccount(createdAccount)
   }
 }
