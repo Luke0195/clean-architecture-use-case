@@ -36,7 +36,7 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "@shelf/jest-mongodb": "^4.3.2"
+    "@shelf/jest-mongodb": "^2.0.3"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
