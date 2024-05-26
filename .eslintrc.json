@@ -8,7 +8,9 @@
         "@typescript-eslint/strict-boolean-expressions": "off",
         "@typescript-eslint/comma-dangle": "off",
         "lint/suspicious/noExplicitAny": "off",
-        "@typescript-eslint/space-before-function-paren": "off"
+        "@typescript-eslint/space-before-function-paren": "off",
+        "@typescript-eslint/no-floating-promises": "off",
+        "@typescript-eslint/no-unused-expressions": "off"
       }
     }
   ]
