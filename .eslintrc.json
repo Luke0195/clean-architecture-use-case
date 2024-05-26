@@ -10,7 +10,8 @@
         "lint/suspicious/noExplicitAny": "off",
         "@typescript-eslint/space-before-function-paren": "off",
         "@typescript-eslint/no-floating-promises": "off",
-        "@typescript-eslint/no-unused-expressions": "off"
+        "@typescript-eslint/no-unused-expressions": "off",
+        "@typescript-eslint/no-misused-promises": "off"
       }
     }
   ]
