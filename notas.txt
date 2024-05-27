@@ -9,3 +9,6 @@ Domain Layer -> é o fica os protocolos da nossas regrasd negócio sáo os casos
 Data Layer -> é responsável por implementar nossas regras de négocio.
 
 Stub - duple de teste
+
+Decoration -> Funciona como um wrapper da minha minha instancia;
+Liskov Principes
