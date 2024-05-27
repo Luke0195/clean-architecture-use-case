@@ -4,14 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand --detectOpenHandles",
     "test:verbose": "jest --passWithNoTests",
     "test:unit": "npm test -- --watch -c jest-unit.config.ts",
     "test:integration": "npm test -- --watch -c jest-integration-config.ts",
     "test:staged": "npm run test -- --findRelatedTests ",
     "test:ci": "npm run test -- --coverage",
     "prepare": "husky",
-    "start": "sucrase-node  src/main/server.ts"
+    "start": "sucrase-node  src/main/server.ts",
+    "lint": "eslint ."
   },
   "keywords": [],
   "author": "",
