@@ -27,7 +27,7 @@ export class SignUpController implements Controller {
       ]
       for (const item of requiredFields) {
         if (!httpRequest.body[item]) {
-          return badRequest(new MissingParamError(`Missing Param: ${item}`))
+          return badRequest(new MissingParamError(`${item}`))
         }
       }
       const { name, email, password, passwordConfirmation } = httpRequest.body
@@ -45,8 +45,8 @@ export class SignUpController implements Controller {
       })
 
       return created(account)
-    } catch (error) {
-      return serverError()
+    } catch (error: any) {
+      return serverError(error as Error)
     }
   }
 }
