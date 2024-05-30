@@ -6,6 +6,7 @@ import {
 } from '../../presentation/protocols'
 import { type AccountModel } from '../../domain/models/account'
 import { ok } from '../../presentation/helpers/http-helper'
+import { type LogErrorRepository } from '../../data/protocols/log-error-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -36,13 +37,24 @@ const makeController = (): Controller => {
   }
   return new ControllerStub()
 }
+
+const makeLogRepository = (): LogErrorRepository => {
+  class LogErrorStub implements LogErrorRepository {
+    async logError(stack: string): Promise<void> {
+      console.log(stack)
+    }
+  }
+  return new LogErrorStub()
+}
+
 interface SutTypes {
   controllerStub: Controller
   sut: LogControllerDecorator
 }
 const makeSut = (): SutTypes => {
   const controllerStub = makeController()
-  const sut = new LogControllerDecorator(controllerStub)
+  const logErrorStub = makeLogRepository()
+  const sut = new LogControllerDecorator(controllerStub, logErrorStub)
   return {
     controllerStub,
     sut
