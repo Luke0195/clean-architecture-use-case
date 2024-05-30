@@ -6,6 +6,18 @@ import {
 } from './db-add-account-protocols'
 import { DbAddAccount } from './db-add-account'
 
+const makeFakeAccount = (): AccountModel => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'validmail@mail.com',
+  password: 'hashed_password'
+})
+
+const makeAccountData = (): AddAccountModel => ({
+  name: 'valid_name',
+  email: 'validmail@mail.com',
+  password: 'validpassword'
+})
 const makeEncrypter = (): Encrypter => {
   class EncrypterStub implements Encrypter {
     async encrypt(password: string): Promise<string> {
@@ -20,12 +32,7 @@ const makeEncrypter = (): Encrypter => {
 const makeAddAccountRepository = (): AddAccountRepository => {
   class AddAccountRepositoryStub implements AddAccountRepository {
     async add(accountData: AddAccountModel): Promise<AccountModel> {
-      const fakeAccount = {
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'validmail@mail.com',
-        password: 'hashed_password'
-      }
+      const fakeAccount = makeFakeAccount()
       return await new Promise((resolve) => {
         resolve(fakeAccount)
       })
@@ -52,11 +59,7 @@ describe('DbAddAccount UseCase', () => {
   test('Should DbAddAccount calls Encrypter with correct password', async () => {
     const { sut, encrypterStub } = makeSut()
     const encrypterSpy = jest.spyOn(encrypterStub, 'encrypt')
-    const accountData = {
-      name: 'valid_name',
-      email: 'validmail@mail.com',
-      password: 'validpassword'
-    }
+    const accountData = makeAccountData()
     await sut.add(accountData)
     expect(encrypterSpy).toHaveBeenCalledWith('validpassword')
   })
@@ -68,11 +71,7 @@ describe('DbAddAccount UseCase', () => {
         reject(new Error())
       })
     )
-    const accountData = {
-      name: 'any_name',
-      email: 'validmail@mail.com',
-      password: 'validpassword'
-    }
+    const accountData = makeAccountData()
     const rejectPromise = sut.add(accountData)
     await expect(rejectPromise).rejects.toThrow()
   })
@@ -117,11 +116,6 @@ describe('DbAddAccount UseCase', () => {
       password: 'validpassword'
     }
     const account = await sut.add(accountData)
-    expect(account).toEqual({
-      id: 'valid_id',
-      name: 'valid_name',
-      email: 'validmail@mail.com',
-      password: 'hashed_password'
-    })
+    expect(account).toEqual(makeFakeAccount())
   })
 })

@@ -4,6 +4,8 @@ import {
   type HttpResponse,
   type Controller
 } from '../../presentation/protocols'
+import { type AccountModel } from '../../domain/models/account'
+import { ok } from '../../presentation/helpers/http-helper'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -13,14 +15,19 @@ const makeFakeRequest = (): HttpRequest => ({
     passwordConfirmation: 'any_password'
   }
 })
+const makeFakeAccount = (): AccountModel => ({
+  id: 'valid_id',
+  name: 'valid_name',
+  email: 'valid_mail@mail.com',
+  password: 'valid_password'
+})
+
 const makeController = (): Controller => {
   class ControllerStub implements Controller {
     async handle(httpRequest: HttpRequest): Promise<HttpResponse> {
       const httpResponse = {
         statusCode: 200,
-        body: {
-          name: 'Lucas'
-        }
+        body: makeFakeAccount()
       }
       return await new Promise((resolve) => {
         resolve(httpResponse)
@@ -54,11 +61,6 @@ describe('LogController Decorator', () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual({
-      statusCode: 200,
-      body: {
-        name: 'Lucas'
-      }
-    })
+    expect(httpResponse).toEqual(ok(makeFakeAccount()))
   })
 })
