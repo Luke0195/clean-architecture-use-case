@@ -1,5 +1,6 @@
+import httpHelper from '../../helpers/http-helper'
 export * from '../../errors'
-export * from '../../helpers/http-helper'
 export * from '../../protocols'
 export * from '../../protocols/email-validator'
 export * from '../../../domain/usecases/authentication'
+export { httpHelper }

@@ -3,9 +3,10 @@ import {
   type EmailValidator,
   type AddAccount,
   type HttpRequest,
-  type HttpResponse
+  type HttpResponse,
+  httpHelper
 } from './signup-protocols'
-import { badRequest, serverError, created } from '../../helpers/http-helper'
+
 import { InvalidParamErorr, MissingParamError } from '../../errors'
 
 export class SignUpController implements Controller {
@@ -27,16 +28,18 @@ export class SignUpController implements Controller {
       ]
       for (const item of requiredFields) {
         if (!httpRequest.body[item]) {
-          return badRequest(new MissingParamError(`${item}`))
+          return httpHelper.badRequest(new MissingParamError(`${item}`))
         }
       }
       const { name, email, password, passwordConfirmation } = httpRequest.body
       const isValidEmail = this.emailValidator.isValid(email as string)
       if (password !== passwordConfirmation) {
-        return badRequest(new MissingParamError('passwordConfirmation'))
+        return httpHelper.badRequest(
+          new MissingParamError('passwordConfirmation')
+        )
       }
       if (!isValidEmail) {
-        return badRequest(new InvalidParamErorr('email'))
+        return httpHelper.badRequest(new InvalidParamErorr('email'))
       }
       const account = await this.addAccount.add({
         email,
@@ -44,9 +47,9 @@ export class SignUpController implements Controller {
         name
       })
 
-      return created(account)
+      return httpHelper.created(account)
     } catch (error: any) {
-      return serverError(error as Error)
+      return httpHelper.serverError(error as Error)
     }
   }
 }

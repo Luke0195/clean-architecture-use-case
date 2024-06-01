@@ -5,10 +5,7 @@ import {
   type Authentication,
   type EmailValidator,
   type HttpRequest,
-  badRequest,
-  serverError,
-  ok,
-  unathorized
+  httpHelper
 } from './login-protocols'
 import { LoginController } from './login'
 
@@ -63,7 +60,9 @@ describe('LoginController', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new MissingParamError('email'))
+    )
   })
 
   test('Should returns 400 if no  password is provided', async () => {
@@ -74,7 +73,9 @@ describe('LoginController', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('password')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new MissingParamError('password'))
+    )
   })
 
   test('Should call EmailValidator with correct email', async () => {
@@ -90,7 +91,9 @@ describe('LoginController', () => {
     const httpRequest = makeFakeRequest()
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRespose = await sut.handle(httpRequest)
-    expect(httpRespose).toEqual(badRequest(new InvalidParamErorr('email')))
+    expect(httpRespose).toEqual(
+      httpHelper.badRequest(new InvalidParamErorr('email'))
+    )
   })
 
   test('Should  returns 500 if EmailValidator throws', async () => {
@@ -101,7 +104,7 @@ describe('LoginController', () => {
     const error = new Error('Fails to validate error')
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError(error))
+    expect(httpResponse).toEqual(httpHelper.serverError(error))
   })
 
   test('Should call Authentication with correct values', async () => {
@@ -127,7 +130,7 @@ describe('LoginController', () => {
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(
-      unathorized(new UnauthorizedError('Invalid Credencials'))
+      httpHelper.unathorized(new UnauthorizedError('Invalid Credencials'))
     )
   })
 
@@ -139,13 +142,13 @@ describe('LoginController', () => {
 
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError(new Error('jwt fails')))
+    expect(httpResponse).toEqual(httpHelper.serverError(new Error('jwt fails')))
   })
 
   test('Should  returns 200 if valid credencials are provided', async () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok('valid_token'))
+    expect(httpResponse).toEqual(httpHelper.ok('valid_token'))
   })
 })

@@ -7,10 +7,7 @@ import {
   type Authentication,
   type HttpRequest,
   type HttpResponse,
-  badRequest,
-  unathorized,
-  serverError,
-  ok
+  httpHelper
 } from './login-protocols'
 
 export class LoginController implements Controller {
@@ -27,22 +24,26 @@ export class LoginController implements Controller {
       const requiredFields = ['email', 'password']
       for (const item of requiredFields) {
         if (!httpRequest.body[item]) {
-          return badRequest(new MissingParamError(item))
+          return httpHelper.badRequest(new MissingParamError(item))
         }
       }
       const { email, password } = httpRequest.body
       const isValidEmail = this.emailValidator.isValid(email as string)
-      if (!isValidEmail) return badRequest(new InvalidParamErorr('email'))
+      if (!isValidEmail) {
+        return httpHelper.badRequest(new InvalidParamErorr('email'))
+      }
       const token = await this.authentication.auth(
         email as string,
         password as string
       )
       if (!token) {
-        return unathorized(new UnauthorizedError('Invalid Crendencials'))
+        return httpHelper.unathorized(
+          new UnauthorizedError('Invalid Crendencials')
+        )
       }
-      return ok(token)
+      return httpHelper.ok(token)
     } catch (error) {
-      return serverError(error as Error)
+      return httpHelper.serverError(error as Error)
     }
   }
 }

@@ -1,12 +1,12 @@
-import { LogControllerDecorator } from './log'
 import {
+  LogControllerDecorator,
+  httpHelper,
   type HttpRequest,
+  type AccountModel,
+  type Controller,
   type HttpResponse,
-  type Controller
-} from '../../presentation/protocols'
-import { type AccountModel } from '../../domain/models/account'
-import { ok } from '../../presentation/helpers/http-helper'
-import { type LogErrorRepository } from '../../data/protocols/log-error-protocols'
+  type LogErrorRepository
+} from './log-protocols'
 
 const makeFakeRequest = (): HttpRequest => ({
   body: {
@@ -73,6 +73,7 @@ describe('LogController Decorator', () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(ok(makeFakeAccount()))
+    console.log({ httpResponse })
+    expect(httpResponse).toEqual(httpHelper.ok(makeFakeAccount()))
   })
 })

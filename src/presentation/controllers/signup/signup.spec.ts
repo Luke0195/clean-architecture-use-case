@@ -1,12 +1,15 @@
 import { SignUpController } from './signup'
-import { MissingParamError, InvalidParamErorr, ServerError } from '../../errors'
 import {
+  MissingParamError,
+  InvalidParamErorr,
+  ServerError,
   type HttpRequest,
   type AccountModel,
   type AddAccount,
-  type EmailValidator
+  type EmailValidator,
+  httpHelper
 } from './signup-protocols'
-import { serverError, created, badRequest } from '../../helpers/http-helper'
+
 const makeFakeAccount = (): AccountModel => ({
   id: 'valid_id',
   name: 'valid_name',
@@ -69,7 +72,9 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('name')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new MissingParamError('name'))
+    )
   })
 
   test('Should return 400 if no email is provided', async () => {
@@ -82,7 +87,9 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('email')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new MissingParamError('email'))
+    )
   })
   test('Should return 400 if no password is provided', async () => {
     const { sut } = makeSut()
@@ -94,7 +101,9 @@ describe('SignUp Controller', () => {
       }
     }
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new MissingParamError('password')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new MissingParamError('password'))
+    )
   })
   test('Should return 400 if no passwordConfirmation is provided', async () => {
     const { sut } = makeSut()
@@ -108,7 +117,7 @@ describe('SignUp Controller', () => {
     const httpResponse = await sut.handle(httpRequest)
 
     expect(httpResponse).toEqual(
-      badRequest(new MissingParamError('passwordConfirmation'))
+      httpHelper.badRequest(new MissingParamError('passwordConfirmation'))
     )
   })
   test('Should return 400 if an invalid email is provided', async () => {
@@ -116,7 +125,9 @@ describe('SignUp Controller', () => {
     jest.spyOn(emailValidatorStub, 'isValid').mockReturnValueOnce(false)
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(badRequest(new InvalidParamErorr('email')))
+    expect(httpResponse).toEqual(
+      httpHelper.badRequest(new InvalidParamErorr('email'))
+    )
   })
   test('Should call EmailValitor with correct email', async () => {
     const { sut, emailValidatorStub } = makeSut()
@@ -133,7 +144,9 @@ describe('SignUp Controller', () => {
     })
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError(new ServerError('any_error')))
+    expect(httpResponse).toEqual(
+      httpHelper.serverError(new ServerError('any_error'))
+    )
   })
 
   test('Should returns 400 if password is not equal to passwordConfirmation', async () => {
@@ -148,7 +161,7 @@ describe('SignUp Controller', () => {
     }
     const httpResponse = await sut.handle(httpRequest)
     expect(httpResponse).toEqual(
-      badRequest(new MissingParamError('passwordConfirmation'))
+      httpHelper.badRequest(new MissingParamError('passwordConfirmation'))
     )
   })
 
@@ -173,13 +186,15 @@ describe('SignUp Controller', () => {
     })
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(serverError(new ServerError('any_error')))
+    expect(httpResponse).toEqual(
+      httpHelper.serverError(new ServerError('any_error'))
+    )
   })
 
   test('Should return 201 if valid data is provided', async () => {
     const { sut } = makeSut()
     const httpRequest = makeFakeRequest()
     const httpResponse = await sut.handle(httpRequest)
-    expect(httpResponse).toEqual(created(makeFakeAccount()))
+    expect(httpResponse).toEqual(httpHelper.created(makeFakeAccount()))
   })
 })
