@@ -1,12 +1,15 @@
-import { InvalidParamErorr, MissingParamError } from '../../errors'
-import { badRequest, serverError, unathorized } from '../../helpers/http-helper'
 import {
+  MissingParamError,
+  UnauthorizedError,
+  InvalidParamErorr,
+  type Authentication,
+  type EmailValidator,
   type HttpRequest,
-  type EmailValidator
-} from '../signup/signup-protocols'
+  badRequest,
+  serverError,
+  unathorized
+} from './login-protocols'
 import { LoginController } from './login'
-import { type Authentication } from '../../../domain/usecases/authentication'
-import { UnauthorizedError } from '../../errors/unathorized-error'
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
