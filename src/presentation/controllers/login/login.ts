@@ -9,7 +9,8 @@ import {
   type HttpResponse,
   badRequest,
   unathorized,
-  serverError
+  serverError,
+  ok
 } from './login-protocols'
 
 export class LoginController implements Controller {
@@ -39,6 +40,7 @@ export class LoginController implements Controller {
       if (!token) {
         return unathorized(new UnauthorizedError('Invalid Crendencials'))
       }
+      return ok(token)
     } catch (error) {
       return serverError(error as Error)
     }

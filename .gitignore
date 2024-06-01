@@ -2,3 +2,4 @@ node_modules
 dist
 coverage
 src/main/config/env.ts
+globalConfig.json
