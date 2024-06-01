@@ -1,11 +1,12 @@
 import { InvalidParamErorr, MissingParamError } from '../../errors'
-import { badRequest, serverError } from '../../helpers/http-helper'
+import { badRequest, serverError, unathorized } from '../../helpers/http-helper'
 import {
   type HttpRequest,
   type EmailValidator
 } from '../signup/signup-protocols'
 import { LoginController } from './login'
 import { type Authentication } from '../../../domain/usecases/authentication'
+import { UnauthorizedError } from '../../errors/unathorized-error'
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
@@ -107,6 +108,22 @@ describe('LoginController', () => {
     expect(authententicationSpy).toHaveBeenCalledWith(
       'anymail@mail.com',
       'any_password'
+    )
+  })
+
+  test('Should  returns 401 if invalid credencials are provided', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(
+      async () =>
+        await new Promise((resolve) => {
+          resolve(null)
+        })
+    )
+
+    const httpRequest = makeFakeRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(
+      unathorized(new UnauthorizedError('Invalid Credencials'))
     )
   })
 })
