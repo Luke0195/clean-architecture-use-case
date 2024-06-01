@@ -7,6 +7,7 @@ import {
   type HttpRequest,
   badRequest,
   serverError,
+  ok,
   unathorized
 } from './login-protocols'
 import { LoginController } from './login'
@@ -14,7 +15,7 @@ import { LoginController } from './login'
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
     async auth(email: string, password: string): Promise<string> {
-      return 'any_token'
+      return 'valid_token'
     }
   }
   return new AuthenticationStub()
@@ -128,5 +129,23 @@ describe('LoginController', () => {
     expect(httpResponse).toEqual(
       unathorized(new UnauthorizedError('Invalid Credencials'))
     )
+  })
+
+  test('Should  returns 500 if authentication throws', async () => {
+    const { sut, authenticationStub } = makeSut()
+    jest.spyOn(authenticationStub, 'auth').mockImplementationOnce(async () => {
+      throw new Error()
+    })
+
+    const httpRequest = makeFakeRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(serverError(new Error('jwt fails')))
+  })
+
+  test('Should  returns 200 if valid credencials are provided', async () => {
+    const { sut } = makeSut()
+    const httpRequest = makeFakeRequest()
+    const httpResponse = await sut.handle(httpRequest)
+    expect(httpResponse).toEqual(ok('valid_token'))
   })
 })
