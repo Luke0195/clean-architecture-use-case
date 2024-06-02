@@ -9,6 +9,7 @@ import { LogMongoRepository } from '../../infra/db/mongodb/log-repository/log'
 
 export const makeSignUpController = (): Controller => {
   const logErrorRepository = new LogMongoRepository()
+
   const salt = 12
   const emailValidator = new EmailValidatorAdapter()
   const bcrypt = new BcryptAdapter(salt)
